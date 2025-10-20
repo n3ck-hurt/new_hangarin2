@@ -1,0 +1,35 @@
+.login-page {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: 0;
+  border-radius: 12px;
+}
+
+.login-card .card-title {
+  font-weight: 700;
+}
+
+.login-card .btn-primary {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 600;
+}
+
+.login-card .form-control {
+  height: 44px;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+

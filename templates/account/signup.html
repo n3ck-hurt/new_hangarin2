@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load account %}
+{% load socialaccount %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}{% trans "Sign up" %} · Hangari Hub{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% providers_media_js %}
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-card card shadow-sm">
+        <div class="card-body p-4">
+            <h3 class="card-title mb-3 text-center">{% trans "Create your account" %}</h3>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <form method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_username">{% trans "Username" %}</label>
+                    {% render_field form.username class+="form-control" placeholder="yourname" %}
+                    {{ form.username.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">{% trans "Email" %}</label>
+                    {% render_field form.email class+="form-control" placeholder="you@example.com" %}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password1">{% trans "Password" %}</label>
+                    {% render_field form.password1 class+="form-control" placeholder="••••••••" %}
+                    {{ form.password1.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">{% trans "Confirm password" %}</label>
+                    {% render_field form.password2 class+="form-control" placeholder="••••••••" %}
+                    {{ form.password2.errors }}
+                </div>
+
+                <button class="btn btn-primary btn-block" type="submit">{% trans "Sign up" %}</button>
+            </form>
+
+            <div class="mt-3">
+                {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                    <div class="text-center text-muted small mb-2">{% trans "Or sign up with" %}</div>
+                    <div class="d-flex gap-2">
+                        {% for provider in socialaccount_providers %}
+                            {% if provider.id == 'github' %}
+                                <a class="btn btn-outline-dark flex-fill d-flex align-items-center justify-content-center disabled" href="#" aria-disabled="true">
+                                    <i class="la la-github mr-2" aria-hidden="true"></i> GitHub
+                                </a>
+                            {% endif %}
+                            {% if provider.id == 'google' %}
+                                <a class="btn btn-outline-danger flex-fill d-flex align-items-center justify-content-center disabled" href="#" aria-disabled="true">
+                                    <i class="la la-google mr-2" aria-hidden="true"></i> Google
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <p class="mt-3 mb-0 text-center small">
+                {% trans "Already have an account?" %}
+                <a href="{% url 'account_login' %}">{% trans "Sign in" %}</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

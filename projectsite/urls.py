@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from studentorg.views import HomePageView, OrganizationList, OrganizationCreateView
 
 urlpatterns = [
@@ -25,3 +27,7 @@ urlpatterns = [
     path('', include('pwa.urls')),  
     path('organization_list/add', OrganizationCreateView.as_view(), name='organization-add'),
 ]
+
+# Serve static files during development
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()
