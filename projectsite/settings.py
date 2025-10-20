@@ -23,10 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+kh9e78k@9kygq7*70@j(8h3y1dmjxm#1kmb71%c05&3pg+k!0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Allow overriding via environment variable DJANGO_DEBUG ("true"/"1" to enable)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('1', 'true', 'yes')
 
 
-ALLOWED_HOSTS = ['youjeez.pythonanywhere.com']
+# Hosts can be provided via DJANGO_ALLOWED_HOSTS env var (comma-separated)
+_default_hosts = 'localhost,127.0.0.1,youjeez.pythonanywhere.com'
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('DJANGO_ALLOWED_HOSTS', _default_hosts).split(',') if h.strip()]
+
+# Required when DEBUG=False for cross-site request forgery protection on HTTPS
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{h}"
+    for h in ALLOWED_HOSTS
+    if h not in ('localhost', '127.0.0.1') and not h.startswith('.')
+]
 
 # Application definition
 
@@ -133,6 +143,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Basic security hardening when running in production
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
