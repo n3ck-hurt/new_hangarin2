@@ -14,7 +14,13 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
+    {% if request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'account_signup' %}
+    <!-- Authentication pages - no dashboard shell -->
+    <div class="container py-5">
+        {% block content %}{% endblock %}
+    </div>
+    {% elif user.is_authenticated %}
+    <!-- Dashboard for authenticated users -->
     <div class="wrapper">
         <div class="main-header">   
             <div class="logo-header">
@@ -233,18 +239,12 @@
             </div>
         </div>
         {% endif %}
-
-        {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
         <div class="main-panel">
             <div class="content">
                 <div class="page-inner">
-        {% else %}
-        <div class="container py-5">
-        {% endif %}
-
-        {% block content %}{% endblock %}
-
-        {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
@@ -274,6 +274,10 @@
         </div>
     </div>
     {% else %}
+    <!-- Redirect unauthenticated users to login -->
+    <div class="container py-5 text-center">
+        <h3>Please log in to access the dashboard</h3>
+        <a href="{% url 'account_login' %}" class="btn btn-primary">Login</a>
     </div>
     {% endif %}
 <!-- Modal -->
