@@ -14,7 +14,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
     <div class="wrapper">
         <div class="main-header">   
             <div class="logo-header">
@@ -234,7 +234,7 @@
         </div>
         {% endif %}
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
         <div class="main-panel">
             <div class="content">
                 <div class="page-inner">
@@ -244,7 +244,7 @@
 
         {% block content %}{% endblock %}
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'account_signup' %}
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
